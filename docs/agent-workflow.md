@@ -1,10 +1,11 @@
-# Agent Workflow (Phase 4)
+# Agent Workflow (Phase 5)
 
-1. Orchestrator analyzes objective complexity and selects workflow mode.
-2. Planner generates milestone plan with owners and outcomes.
-3. Research aligns findings to planned milestones.
-4. Decision selects strategy from profile + findings.
-5. Execution completes deliverables with milestone evidence.
-6. Memory captures run snapshot for persistence handoff.
+1. Workflow starts by recalling relevant long-term memory records from PostgreSQL + Redis cache.
+2. Orchestrator analyzes objective complexity and uses memory hints to choose workflow mode.
+3. Planner generates milestone plan and injects strongest recalled insight.
+4. Research aligns findings to planned milestones.
+5. Decision selects strategy from profile + findings.
+6. Execution completes deliverables with milestone evidence.
+7. Memory agent captures snapshot and workflow service persists long-term memory record.
 
-Each stage emits timeline events and task status transitions for realtime UX.
+This produces an end-to-end memory loop: recall before execution, persist after execution.
