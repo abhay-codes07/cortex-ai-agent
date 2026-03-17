@@ -1,4 +1,4 @@
-# Frontend Experience (Phase 9)
+# Frontend Experience (Phase 10)
 
 ## Primary Views
 
@@ -13,6 +13,7 @@
 - Execution timeline panel
 - Memory recall panel
 - Task history panel
+- Demo autopilot scenario launcher
 
 ## Realtime UX
 
@@ -25,9 +26,9 @@
 
 ## Demo Mode Guarantees
 
+- One-click autopilot scenario execution via `/api/v1/demo/run`
 - Uses deterministic fallback simulation when backend is unreachable
 - Streams staged timeline logs with no crashes
-- Supports one-click collaboration auto-demo
 
 ## Screenshot Placeholders
 
@@ -35,4 +36,4 @@
 - `docs/screenshots/dashboard-overview.png`
 - `docs/screenshots/live-collaboration.png`
 - `docs/screenshots/realtime-stream.png`
-- `docs/screenshots/demo-mode.png`
+- `docs/screenshots/demo-autopilot.png`
