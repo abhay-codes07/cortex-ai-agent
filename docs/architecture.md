@@ -1,34 +1,35 @@
-# Cortex Architecture (Phase 5)
+# Cortex Architecture (Phase 6)
 
 ## Current Foundation
 
 - Frontend: Next.js App Router + Tailwind + Framer Motion scaffolding
-- Backend: FastAPI with task APIs, memory APIs, and orchestrated multi-agent runtime
+- Backend: FastAPI with task, memory, workflow, and tools APIs
 - Infra: Docker Compose setup for PostgreSQL + Redis
 
-## Memory System
+## Tool System
 
-- Short-term memory:
-  - runtime context memory map per workflow
-  - timeline event tracking per workflow
-- Long-term memory (PostgreSQL):
-  - `memory_records` table
-  - objective, summary, strategy, workflow mode
-  - plan steps, deliverables, tags
-- Recall engine:
-  - lexical relevance scoring against objective/summary/tags
-  - Redis-cached recall responses for fast demo playback
+- Tool abstraction:
+  - base tool interface
+  - typed tool call/result contracts
+  - registry + bootstrap wiring
+- Tool implementations:
+  - email simulator
+  - slack simulator
+  - web search mock
+  - task executor
+- Tool service:
+  - single and batch execution
+  - API exposure for direct demo triggers
 
-## Workflow Memory Loop
+## Workflow Integration
 
-1. Recall top related memories for incoming objective.
-2. Pass memory hints into orchestrator/planner context.
-3. Execute full agent pipeline.
-4. Persist new long-term memory record from final snapshot.
+1. Workflow injects a tool executor callback into runtime context.
+2. Execution agent performs tool calls as part of milestone completion.
+3. Tool outputs are added to timeline and stored in memory snapshots.
 
 ## Upcoming Build Order
 
-1. Tool abstractions
-2. Collaboration runtime and websocket stream
-3. Dashboard and timeline visualization
+1. Multi-agent collaboration UX layer
+2. Frontend luxury dashboard
+3. Realtime websocket stream
 4. Demo mode autopilot
