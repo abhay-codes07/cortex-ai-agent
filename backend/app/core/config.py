@@ -10,7 +10,17 @@ class Settings(BaseSettings):
 
     app_env: str = Field(default='development', alias='APP_ENV')
     app_name: str = Field(default='Cortex API', alias='APP_NAME')
+    app_version: str = Field(default='0.2.0', alias='APP_VERSION')
+
     cors_origins_raw: str = Field(default='http://localhost:3000', alias='CORS_ORIGINS')
+
+    database_url: str = Field(
+        default='postgresql+psycopg://cortex:cortex@localhost:5432/cortex', alias='DATABASE_URL'
+    )
+    redis_url: str = Field(default='redis://localhost:6379/0', alias='REDIS_URL')
+    redis_ttl_seconds: int = Field(default=120, alias='REDIS_TTL_SECONDS')
+
+    api_v1_prefix: str = Field(default='/api/v1', alias='API_V1_PREFIX')
 
     @property
     def cors_origins(self) -> List[str]:
