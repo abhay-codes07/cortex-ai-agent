@@ -1,5 +1,7 @@
 import type {
   CollaborationRunResponse,
+  DemoRunResponse,
+  DemoScenario,
   MemoryRecallItem,
   WorkflowRunResponse,
 } from './types';
@@ -64,4 +66,16 @@ export async function recentTasks(): Promise<Array<{ id: string; title: string; 
     items: Array<{ id: string; title: string; status: string; created_at: string }>;
   }>('/api/v1/tasks?limit=8&offset=0');
   return data.items;
+}
+
+export async function demoScenarios(): Promise<DemoScenario[]> {
+  const data = await callApi<{ items: DemoScenario[] }>('/api/v1/demo/scenarios');
+  return data.items;
+}
+
+export async function runDemoScenario(scenarioId: string): Promise<DemoRunResponse> {
+  return callApi<DemoRunResponse>('/api/v1/demo/run', {
+    method: 'POST',
+    body: JSON.stringify({ scenario_id: scenarioId }),
+  });
 }
