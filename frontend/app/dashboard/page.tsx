@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { BrainCircuit, Home } from 'lucide-react';
+import { BrainCircuit, Home, RadioTower } from 'lucide-react';
 
 import { AgentNetwork } from '@/components/dashboard/agent-network';
 import { LogStream } from '@/components/dashboard/log-stream';
@@ -12,9 +12,10 @@ import { MetricChip } from '@/components/dashboard/metric-chip';
 import { TaskComposer } from '@/components/dashboard/task-composer';
 import { TaskHistory } from '@/components/dashboard/task-history';
 import { TimelinePanel } from '@/components/dashboard/timeline-panel';
-import { statusFromStage, roleFromStage } from '@/lib/agent-utils';
+import { roleFromStage, statusFromStage } from '@/lib/agent-utils';
 import { listAgents, recallMemory, recentTasks, runCollaboration, runWorkflow } from '@/lib/api';
 import { DEMO_TASKS, mockCollaborationResponse, mockWorkflowResponse } from '@/lib/demo';
+import { connectRealtime, type RealtimeConnectionState } from '@/lib/realtime';
 import type { AgentNode, MemoryRecallItem, TimelineEvent } from '@/lib/types';
 
 const fallbackAgents: AgentNode[] = [
@@ -40,6 +41,10 @@ export default function DashboardPage() {
   const [history, setHistory] = useState<Array<{ id: string; title: string; status: string; created_at: string }>>([]);
 
   const [runMode, setRunMode] = useState<'workflow' | 'collaboration'>('workflow');
+  const [realtimeState, setRealtimeState] = useState<RealtimeConnectionState>('disconnected');
+
+  const socketRef = useRef<WebSocket | null>(null);
+  const liveEventCounterRef = useRef(0);
 
   const stats = useMemo(() => {
     const done = agents.filter((agent) => agent.status === 'done').length;
@@ -67,6 +72,43 @@ export default function DashboardPage() {
     void bootstrap();
   }, []);
 
+  useEffect(() => {
+    const socket = connectRealtime({
+      onStateChange: (state) => setRealtimeState(state),
+      onEvent: (event) => {
+        liveEventCounterRef.current += 1;
+
+        if (!running || demoMode) return;
+
+        setTimeline((prev) => [...prev, event]);
+        setLogs((prev) => [...prev, `[${event.stage}] ${event.message}`]);
+
+        setAgents((prev) =>
+          prev.map((agent) => {
+            const role = roleFromStage(event.stage);
+            if (role && role === agent.role) {
+              return { ...agent, status: statusFromStage(event.stage) };
+            }
+            return agent;
+          }),
+        );
+      },
+    });
+
+    socketRef.current = socket;
+
+    const ping = setInterval(() => {
+      if (socket.readyState === WebSocket.OPEN) {
+        socket.send('ping');
+      }
+    }, 15000);
+
+    return () => {
+      clearInterval(ping);
+      socket.close();
+    };
+  }, [demoMode, running]);
+
   const streamExperience = async (events: TimelineEvent[]) => {
     setTimeline([]);
     for (let index = 0; index < events.length; index += 1) {
@@ -93,14 +135,21 @@ export default function DashboardPage() {
 
     setRunning(true);
     setLogs([`[mission] ${objective}`]);
+    setTimeline([]);
     setAgents((prev) => prev.map((agent) => ({ ...agent, status: 'thinking' })));
 
     try {
       const memory = demoMode ? [] : await recallMemory(objective);
       setMemoryItems(memory);
 
+      const beforeCounter = liveEventCounterRef.current;
       const workflow = demoMode ? mockWorkflowResponse(objective) : await runWorkflow(objective);
-      await streamExperience(workflow.timeline);
+
+      if (demoMode) {
+        await streamExperience(workflow.timeline);
+      } else if (liveEventCounterRef.current === beforeCounter || realtimeState !== 'connected') {
+        await streamExperience(workflow.timeline);
+      }
 
       setLogs((prev) => [...prev, `[result] ${workflow.task.result ?? 'Mission complete'}`]);
       setRunMode('workflow');
@@ -127,11 +176,19 @@ export default function DashboardPage() {
     setObjective(selected);
     setRunning(true);
     setLogs([`[demo] ${selected}`]);
+    setTimeline([]);
     setAgents((prev) => prev.map((agent) => ({ ...agent, status: 'thinking' })));
 
     try {
+      const beforeCounter = liveEventCounterRef.current;
       const result = demoMode ? mockCollaborationResponse(selected) : await runCollaboration(selected, 2);
-      await streamExperience(result.timeline);
+
+      if (demoMode) {
+        await streamExperience(result.timeline);
+      } else if (liveEventCounterRef.current === beforeCounter || realtimeState !== 'connected') {
+        await streamExperience(result.timeline);
+      }
+
       setLogs((prev) => [...prev, `[collaboration] session complete in ${result.rounds} rounds`]);
       setRunMode('collaboration');
     } catch {
@@ -160,6 +217,10 @@ export default function DashboardPage() {
             <MetricChip label="Active" value={String(stats.working)} tone="mint" />
             <MetricChip label="Done" value={`${stats.done}/${stats.total}`} tone="sky" />
             <MetricChip label="Mode" value={runMode} tone="amber" />
+            <span className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-3 py-1.5">
+              <RadioTower className={`h-4 w-4 ${realtimeState === 'connected' ? 'text-[#1fd3b4]' : 'text-[#ff8b42]'}`} />
+              <span className="mono text-xs uppercase tracking-[0.18em]">{realtimeState}</span>
+            </span>
             <Link href="/" className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 hover:bg-white/10">
               <Home className="h-4 w-4" />
               Home
