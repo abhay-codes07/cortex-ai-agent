@@ -6,23 +6,17 @@ A YC-style, demo-first multi-agent product where a team of AI agents plans, coll
 
 Cortex is not a chatbot. It is an autonomous AI workforce. You submit one objective, and specialized AI agents coordinate to deliver outcomes with visible reasoning and live execution logs.
 
-## What Is Live In Phase 8
+## What Is Live In Phase 9
 
-- Premium Next.js frontend with startup-grade landing and command dashboard
-- Mission control with task input, demo mode, and auto-run collaboration demo
-- Animated agent network, live logs stream, and execution timeline playback
-- Memory recall and task history context panels
-- API-first data flow with deterministic fallback simulation for judge-safe demos
-- Backend APIs for tasks, agents, workflows, collaboration, tools, and memory
-
-## Dashboard Features
-
-- Task input + run controls
-- Demo mode with preloaded mission templates
-- Agent status visualization (thinking, working, done)
-- Live log stream and execution timeline
-- Memory recall context
-- Task history
+- Premium frontend command dashboard with mission control, agent network, logs, timeline, memory, and history panels
+- Full backend API surface for tasks, workflows, collaboration, tools, and memory
+- Realtime websocket streaming layer from backend to dashboard
+- Live run telemetry:
+  - agent step transitions
+  - tool execution events
+  - task status updates
+  - memory recall/persist events
+- Deterministic fallback simulation remains available for fail-safe demos
 
 ## Backend API Surface
 
@@ -30,6 +24,8 @@ Cortex is not a chatbot. It is an autonomous AI workforce. You submit one object
 - `GET /api/v1/status`
 - `GET /api/v1/meta`
 - `GET /api/v1/system`
+- `GET /api/v1/realtime/status`
+- `WS /api/v1/realtime/ws`
 - `POST /api/v1/tasks`
 - `GET /api/v1/tasks`
 - `GET /api/v1/tasks/{task_id}`
@@ -55,13 +51,7 @@ Cortex is not a chatbot. It is an autonomous AI workforce. You submit one object
 - `powershell ./scripts/demo-memory-recall.ps1`
 - `powershell ./scripts/demo-tools.ps1`
 - `powershell ./scripts/demo-collaboration-run.ps1`
-
-## Screenshots
-
-- `docs/screenshots/landing.png` (placeholder)
-- `docs/screenshots/dashboard-overview.png` (placeholder)
-- `docs/screenshots/live-collaboration.png` (placeholder)
-- `docs/screenshots/demo-mode.png` (placeholder)
+- `powershell ./scripts/demo-realtime-status.ps1`
 
 ## Phase Plan
 
@@ -73,5 +63,5 @@ Cortex is not a chatbot. It is an autonomous AI workforce. You submit one object
 - Phase 6: Tool execution layer (complete)
 - Phase 7: Multi-agent collaboration (complete)
 - Phase 8: Premium dashboard UI (complete)
-- Phase 9: Realtime websocket stream
+- Phase 9: Realtime websocket stream (complete)
 - Phase 10: Demo mode and polish
