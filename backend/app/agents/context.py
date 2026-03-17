@@ -24,6 +24,9 @@ class RuntimeContext:
     def get_state(self, key: str, default: Any = None) -> Any:
         return self.shared_state.get(key, default)
 
+    def read_inbox(self, role_name: str) -> list[dict[str, Any]]:
+        return self.get_state(f'inbox:{role_name}', [])
+
     def add_timeline_event(self, stage: str, message: str, metadata: dict[str, Any] | None = None) -> None:
         self.timeline_events.append(
             {
