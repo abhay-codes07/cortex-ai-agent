@@ -34,9 +34,16 @@
 - [x] Add workflow run service to coordinate full agent sequence
 - [x] Add workflow API endpoint with timeline and transcript output
 
+## Phase 5 - Memory System
+
+- [x] Add persistent memory record model in PostgreSQL
+- [x] Add memory repository and service layer
+- [x] Add memory create/recent/recall APIs
+- [x] Add Redis-cached memory recall responses
+- [x] Integrate recall-before-run and persist-after-run workflow loop
+
 ## Next Phases
 
-- Phase 5: Memory system
 - Phase 6: Tool execution
 - Phase 7: Multi-agent collaboration
 - Phase 8: Frontend luxury UI
