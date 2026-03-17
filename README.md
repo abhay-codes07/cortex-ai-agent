@@ -6,15 +6,16 @@ A YC-style, demo-first multi-agent product where a team of AI agents plans, coll
 
 Cortex is not a chatbot. It is an autonomous AI workforce. You submit one objective, and specialized AI agents coordinate to deliver outcomes with visible reasoning and live execution logs.
 
-## What Is Live In Phase 3
+## What Is Live In Phase 4
 
-- Monorepo foundation with `frontend`, `backend`, `infra`, and `docs`
 - FastAPI backend core APIs for tasks, status updates, and summaries
 - SQLAlchemy task persistence and Redis-backed read caching
-- Modular multi-agent base system with typed contracts and runtime context
-- Six core agent implementations (orchestrator, planner, research, decision, execution, memory)
-- Agent registry + runtime + transcript aggregation
-- Agent simulation API for deterministic demo workflows
+- Modular multi-agent system with typed contracts and runtime context
+- Dynamic orchestrator + planner intelligence:
+  - objective complexity analysis
+  - milestone generation with owners
+  - state-machine-based task lifecycle transitions
+- Workflow execution API that runs the full agent pipeline and returns timeline transcript
 
 ## Backend API Surface
 
@@ -30,6 +31,7 @@ Cortex is not a chatbot. It is an autonomous AI workforce. You submit one object
 - `GET /api/v1/tasks/summary`
 - `GET /api/v1/agents`
 - `POST /api/v1/agents/simulate`
+- `POST /api/v1/workflows/run`
 
 ## Monorepo Layout
 
@@ -48,12 +50,17 @@ Cortex is not a chatbot. It is an autonomous AI workforce. You submit one object
 3. Start backend: `cd backend && powershell ./run.ps1`
 4. Start frontend: `cd frontend && npm install && npm run dev`
 
+## Demo Helpers
+
+- `powershell ./scripts/demo-agent-simulate.ps1`
+- `powershell ./scripts/demo-workflow-run.ps1`
+
 ## Phase Plan
 
 - Phase 1: Setup and repo initialization (complete)
 - Phase 2: Backend core APIs (complete)
 - Phase 3: Agent base system (complete)
-- Phase 4: Orchestrator + planner workflow intelligence
+- Phase 4: Orchestrator + planner workflow intelligence (complete)
 - Phase 5: Memory layer
 - Phase 6: Tool execution layer
 - Phase 7: Multi-agent collaboration

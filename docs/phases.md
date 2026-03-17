@@ -26,9 +26,16 @@
 - [x] Add collaboration transcript aggregator
 - [x] Add deterministic simulation endpoint
 
+## Phase 4 - Orchestrator + Planner
+
+- [x] Add objective analyzer with complexity and urgency scoring
+- [x] Add dynamic milestone planning with ownership mapping
+- [x] Add orchestration state machine for lifecycle transitions
+- [x] Add workflow run service to coordinate full agent sequence
+- [x] Add workflow API endpoint with timeline and transcript output
+
 ## Next Phases
 
-- Phase 4: Orchestrator + Planner
 - Phase 5: Memory system
 - Phase 6: Tool execution
 - Phase 7: Multi-agent collaboration
