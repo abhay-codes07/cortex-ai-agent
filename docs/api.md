@@ -1,4 +1,4 @@
-# API Reference (Phase 5)
+# API Reference (Phase 6)
 
 ## Health and system
 
@@ -31,11 +31,20 @@
 - `GET /api/v1/memory/recent`
 - `POST /api/v1/memory/recall`
 
-## Memory recall request
+## Tools
+
+- `GET /api/v1/tools`
+- `POST /api/v1/tools/execute`
+- `POST /api/v1/tools/execute/batch`
+
+## Tool execute request
 
 ```json
 {
-  "objective": "Plan and execute a startup launch sprint with clear milestones and timeline outputs.",
-  "limit": 5
+  "name": "send_slack",
+  "payload": {
+    "channel": "#cortex-live",
+    "message": "Tool layer active"
+  }
 }
 ```
