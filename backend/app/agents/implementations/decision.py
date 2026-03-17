@@ -13,14 +13,17 @@ class DecisionAgent(BaseAgent):
         findings = context.recall('research_findings', [])
         plan = context.recall('plan_steps', [])
         profile = context.recall('objective_profile', {})
+        inbox = context.read_inbox(self.role.value)
 
         complexity = int(profile.get('complexity_score', 1))
         style = 'parallel_execution' if complexity >= 5 else 'iterative_execution'
+        confidence = 'high' if len(findings) >= 4 else 'medium'
 
         selected_strategy = {
             'strategy': style,
             'why': 'Balances speed with reliability while preserving visible agent reasoning.',
-            'inputs': {'plan_steps': len(plan), 'findings': len(findings), 'complexity': complexity},
+            'inputs': {'plan_steps': len(plan), 'findings': len(findings), 'complexity': complexity, 'inbox': len(inbox)},
+            'confidence': confidence,
         }
 
         thought = self.thought(
