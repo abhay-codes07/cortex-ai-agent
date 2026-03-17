@@ -1,4 +1,4 @@
-# API Reference (Phase 6)
+# API Reference (Phase 7)
 
 ## Health and system
 
@@ -25,6 +25,11 @@
 
 - `POST /api/v1/workflows/run`
 
+## Collaboration
+
+- `POST /api/v1/collaboration/run`
+- `GET /api/v1/collaboration/sessions`
+
 ## Memory
 
 - `POST /api/v1/memory/records`
@@ -37,14 +42,12 @@
 - `POST /api/v1/tools/execute`
 - `POST /api/v1/tools/execute/batch`
 
-## Tool execute request
+## Collaboration run request
 
 ```json
 {
-  "name": "send_slack",
-  "payload": {
-    "channel": "#cortex-live",
-    "message": "Tool layer active"
-  }
+  "title": "Collab demo",
+  "objective": "Coordinate a launch plan where multiple AI agents collaborate in real-time with tool calls.",
+  "rounds": 2
 }
 ```
