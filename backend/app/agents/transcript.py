@@ -14,10 +14,11 @@ class CollaborationTranscript:
         self.actions.extend(result.actions)
         self.messages.extend(result.messages)
 
-    def as_dict(self) -> dict:
+    def as_dict(self, timeline: list[dict] | None = None) -> dict:
         return {
             'results': [result.model_dump(mode='json') for result in self.results],
             'thoughts': [thought.model_dump(mode='json') for thought in self.thoughts],
             'actions': [action.model_dump(mode='json') for action in self.actions],
             'messages': [message.model_dump(mode='json') for message in self.messages],
+            'timeline': timeline or [],
         }
