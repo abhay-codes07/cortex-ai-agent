@@ -16,6 +16,7 @@ class PlannerAgent(BaseAgent):
     def run(self, context: RuntimeContext) -> AgentResult:
         profile_data = context.recall('objective_profile', {})
         memory_hints = context.recall('memory_hints', [])
+        inbox = context.read_inbox(self.role.value)
 
         profile = self.analyzer.from_scores(
             objective=context.objective,
@@ -28,6 +29,8 @@ class PlannerAgent(BaseAgent):
 
         if memory_hints:
             plan_steps.append(f"Prior memory insight: {memory_hints[0]}")
+        if inbox:
+            plan_steps.append('Incorporate cross-agent feedback from previous round messages')
 
         thought = self.thought(
             step='Break objective into plan',
