@@ -12,21 +12,26 @@ class DecisionAgent(BaseAgent):
     def run(self, context: RuntimeContext) -> AgentResult:
         findings = context.recall('research_findings', [])
         plan = context.recall('plan_steps', [])
+        profile = context.recall('objective_profile', {})
+
+        complexity = int(profile.get('complexity_score', 1))
+        style = 'parallel_execution' if complexity >= 5 else 'iterative_execution'
 
         selected_strategy = {
-            'strategy': 'iterative_execution',
-            'why': 'Combines fast loops, clear milestones, and transparent logs for dependable demos.',
-            'inputs': {'plan_steps': len(plan), 'findings': len(findings)},
+            'strategy': style,
+            'why': 'Balances speed with reliability while preserving visible agent reasoning.',
+            'inputs': {'plan_steps': len(plan), 'findings': len(findings), 'complexity': complexity},
         }
 
         thought = self.thought(
             step='Select best strategy',
-            reasoning=f'{DECISION_PROMPT} Prioritizing low-risk, high-visibility execution path aligned with speed and demo reliability.',
+            reasoning=f'{DECISION_PROMPT} Chose {style} path using plan depth and research confidence.',
         )
         action = self.action('select_strategy', selected_strategy)
-        message = self.message(AgentRole.execution, 'Execute with iterative milestones and stream visible progress.')
+        message = self.message(AgentRole.execution, 'Execute selected strategy and stream milestone completion logs.')
 
         context.set_state('selected_strategy', selected_strategy)
+        context.add_timeline_event('deciding', 'Decision agent finalized execution strategy', {'strategy': style})
 
         return AgentResult(
             agent=self.role,
