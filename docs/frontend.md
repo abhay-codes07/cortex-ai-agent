@@ -1,4 +1,4 @@
-# Frontend Experience (Phase 8)
+# Frontend Experience (Phase 9)
 
 ## Primary Views
 
@@ -14,6 +14,15 @@
 - Memory recall panel
 - Task history panel
 
+## Realtime UX
+
+- WebSocket connection to `WS /api/v1/realtime/ws`
+- Live connection state chip (`connecting`, `connected`, `disconnected`)
+- Streaming event updates drive:
+  - timeline cards
+  - log lines
+  - agent state transitions
+
 ## Demo Mode Guarantees
 
 - Uses deterministic fallback simulation when backend is unreachable
@@ -25,4 +34,5 @@
 - `docs/screenshots/landing.png`
 - `docs/screenshots/dashboard-overview.png`
 - `docs/screenshots/live-collaboration.png`
+- `docs/screenshots/realtime-stream.png`
 - `docs/screenshots/demo-mode.png`
