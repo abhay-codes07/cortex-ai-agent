@@ -1,36 +1,20 @@
-# Cortex Architecture (Phase 9)
+# Cortex Architecture (Phase 10)
 
 ## Current Foundation
 
-- Frontend: Premium dashboard with live timeline/log panels and realtime status indicator
-- Backend: FastAPI with task, memory, workflow, tools, collaboration, and realtime APIs
+- Frontend: Premium dashboard with live timeline/log panels, realtime status, and demo autopilot controls
+- Backend: FastAPI with task, memory, workflow, tools, collaboration, realtime, and demo APIs
 - Infra: Docker Compose setup for PostgreSQL + Redis
 
-## Realtime Layer
+## Demo Reliability Layer
 
-- WebSocket endpoint:
-  - `WS /api/v1/realtime/ws`
-- Realtime manager:
-  - connection tracking
-  - broadcast fanout to all clients
-- Event emission points:
-  - task create/status updates
-  - workflow step transitions
-  - collaboration turns/rounds
-  - tool execution callbacks
-  - memory recall/persist events
+- Curated demo scenarios API
+- One-click autopilot execution API
+- Realtime event streaming through the full run
+- Fallback scripted simulation if backend/websocket is unavailable
 
-## Frontend Streaming Behavior
+## Launch Characteristics
 
-- Dashboard opens websocket connection on load
-- Realtime status chip shows `connecting|connected|disconnected`
-- During live runs, websocket events append to:
-  - timeline panel
-  - log stream panel
-  - agent node status transitions
-- If websocket/backend is unavailable, deterministic fallback simulation still runs
-
-## Upcoming Build Order
-
-1. Demo mode autopilot polish
-2. Final README/screenshots and launch narrative
+- Visual intelligence in under 30 seconds
+- Deterministic demo behavior for judges
+- End-to-end multi-agent execution with memory + tool evidence
