@@ -1,4 +1,4 @@
-# API Reference (Phase 9)
+# API Reference (Phase 10)
 
 ## Health and system
 
@@ -11,6 +11,11 @@
 
 - `GET /api/v1/realtime/status`
 - `WS /api/v1/realtime/ws`
+
+## Demo Mode
+
+- `GET /api/v1/demo/scenarios`
+- `POST /api/v1/demo/run`
 
 ## Tasks
 
@@ -59,5 +64,13 @@
     "task_id": "..."
   },
   "timestamp": "2026-03-17T00:00:00.000000"
+}
+```
+
+## Demo run request
+
+```json
+{
+  "scenario_id": "launch-sprint"
 }
 ```
