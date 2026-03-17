@@ -1,3 +1,4 @@
+from app.schemas.agent import AgentNodeStatus, AgentSimulationRequest, AgentSimulationResponse
 from app.schemas.common import ErrorResponse
 from app.schemas.task import (
     TaskCreateRequest,
@@ -8,6 +9,9 @@ from app.schemas.task import (
 )
 
 __all__ = [
+    'AgentNodeStatus',
+    'AgentSimulationRequest',
+    'AgentSimulationResponse',
     'ErrorResponse',
     'TaskCreateRequest',
     'TaskUpdateStatusRequest',
