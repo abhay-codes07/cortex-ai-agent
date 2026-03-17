@@ -1,35 +1,32 @@
-# Cortex Architecture (Phase 6)
+# Cortex Architecture (Phase 7)
 
 ## Current Foundation
 
 - Frontend: Next.js App Router + Tailwind + Framer Motion scaffolding
-- Backend: FastAPI with task, memory, workflow, and tools APIs
+- Backend: FastAPI with task, memory, workflow, tools, and collaboration APIs
 - Infra: Docker Compose setup for PostgreSQL + Redis
 
-## Tool System
+## Collaboration Runtime
 
-- Tool abstraction:
-  - base tool interface
-  - typed tool call/result contracts
-  - registry + bootstrap wiring
-- Tool implementations:
-  - email simulator
-  - slack simulator
-  - web search mock
-  - task executor
-- Tool service:
-  - single and batch execution
-  - API exposure for direct demo triggers
+- Collaboration message bus:
+  - publish/drain per recipient agent
+  - delivered + pending message tracking
+- Collaboration session model:
+  - session id, rounds, event log
+  - per-agent turn results
+- Multi-round execution:
+  - runtime executes agents across configurable rounds
+  - inbox context delivered each turn
+  - timeline events generated for every turn and round
 
-## Workflow Integration
+## UX Impact
 
-1. Workflow injects a tool executor callback into runtime context.
-2. Execution agent performs tool calls as part of milestone completion.
-3. Tool outputs are added to timeline and stored in memory snapshots.
+- Judges can see explicit cross-agent communication loops.
+- Transcript now includes multi-round evidence, not just single-pass output.
+- Sessions endpoint enables replay/debug in dashboard timeline views.
 
 ## Upcoming Build Order
 
-1. Multi-agent collaboration UX layer
-2. Frontend luxury dashboard
-3. Realtime websocket stream
-4. Demo mode autopilot
+1. Frontend luxury dashboard and agent visualization
+2. Realtime websocket stream
+3. Demo mode autopilot and final polish
