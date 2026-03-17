@@ -1,18 +1,38 @@
-# Cortex Architecture (Phase 1)
+# Cortex Architecture (Phase 3)
 
 ## Current Foundation
 
 - Frontend: Next.js App Router + Tailwind + Framer Motion scaffolding
-- Backend: FastAPI service with baseline routes and configuration
+- Backend: FastAPI with task APIs, system checks, and multi-agent base runtime
 - Infra: Docker Compose setup for PostgreSQL + Redis
+
+## Agent Base Layer
+
+- Agent contracts:
+  - messages
+  - thoughts
+  - actions
+  - structured results
+- Runtime context:
+  - objective
+  - short-term memory map
+  - shared state
+- Registry and bootstrap:
+  - orchestrator
+  - planner
+  - research
+  - decision
+  - execution
+  - memory
+- Runtime executor:
+  - deterministic sequence execution
+  - transcript aggregation for UI streaming
 
 ## Upcoming Build Order
 
-1. Backend core APIs
-2. Agent base classes and message contracts
-3. Orchestrator and planner loop
-4. Memory service wiring
-5. Tool abstractions
-6. Collaboration runtime and websocket stream
-7. Dashboard and timeline visualization
-8. Demo mode autopilot
+1. Orchestrator and planner workflow intelligence
+2. Memory service wiring
+3. Tool abstractions
+4. Collaboration runtime and websocket stream
+5. Dashboard and timeline visualization
+6. Demo mode autopilot

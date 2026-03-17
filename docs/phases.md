@@ -16,9 +16,18 @@
 - [x] Add summary and history endpoints
 - [x] Add Redis-backed cache layer for read-heavy endpoints
 
+## Phase 3 - Agent Base System
+
+- [x] Add typed agent contracts and roles
+- [x] Add runtime context with short-term memory state
+- [x] Add pluggable base agent abstraction
+- [x] Add agent registry and default bootstrap wiring
+- [x] Add six base agent implementations
+- [x] Add collaboration transcript aggregator
+- [x] Add deterministic simulation endpoint
+
 ## Next Phases
 
-- Phase 3: Agent base system
 - Phase 4: Orchestrator + Planner
 - Phase 5: Memory system
 - Phase 6: Tool execution
