@@ -1,6 +1,7 @@
 from app.services.agent_system_service import AgentSystemService
 from app.services.cache_service import CacheService
 from app.services.collaboration_service import CollaborationService
+from app.services.demo_service import DemoService
 from app.services.memory_service import MemoryService
 from app.services.realtime_service import emit_event
 from app.services.system_service import SystemService
@@ -12,6 +13,7 @@ __all__ = [
     'AgentSystemService',
     'CacheService',
     'CollaborationService',
+    'DemoService',
     'MemoryService',
     'SystemService',
     'TaskService',
