@@ -11,6 +11,7 @@ from app.schemas.memory import MemoryCreateRequest, MemoryRecallRequest
 from app.schemas.task import TaskCreateRequest, TaskUpdateStatusRequest
 from app.schemas.workflow import WorkflowRunRequest, WorkflowRunResponse
 from app.services.memory_service import MemoryService
+from app.services.realtime_service import emit_event
 from app.services.task_service import TaskService
 from app.services.tool_service import ToolService
 
@@ -33,6 +34,8 @@ class WorkflowService:
             title = payload.title or payload.objective[:80]
             task = self.task_service.create_task(TaskCreateRequest(title=title, prompt=payload.objective))
 
+        emit_event('workflow', 'Workflow run started', {'task_id': task.id})
+
         logger = WorkflowEventLogger()
         context = self.coordinator.prepare_context(task_id=task.id, objective=payload.objective)
 
@@ -40,6 +43,7 @@ class WorkflowService:
             result = self.tool_service.execute_tool(name, data)
             context.add_timeline_event('tool_execution', f"Tool executed: {name}", {'status': result.status})
             logger.add('tool_execution', f"Tool executed: {name}", {'status': result.status})
+            emit_event('tool_execution', f'Tool executed: {name}', {'status': result.status, 'task_id': task.id})
             return result
 
         context.set_state('tool_executor', tool_executor)
@@ -50,6 +54,7 @@ class WorkflowService:
         if hints:
             context.add_timeline_event('memory_recall', 'Loaded relevant long-term memory hints', {'count': len(hints)})
             logger.add('memory_recall', 'Memory recall loaded before orchestration', {'count': len(hints)})
+            emit_event('memory_recall', 'Loaded long-term memory hints', {'count': len(hints), 'task_id': task.id})
 
         started_at = datetime.utcnow()
 
@@ -62,6 +67,7 @@ class WorkflowService:
             )
             logger.add(stage, f'{role.value} agent started', {'task_id': task.id})
             run_context.add_timeline_event(stage, f'{role.value} agent started')
+            emit_event(stage, f'{role.value} agent started', {'task_id': task.id})
 
         transcript = self.runtime.run_once(context, on_step=on_step)
 
@@ -79,6 +85,7 @@ class WorkflowService:
 
         logger.add('completed', 'Workflow completed successfully', {'task_id': task.id})
         context.add_timeline_event('completed', 'Workflow completed successfully')
+        emit_event('completed', 'Workflow completed successfully', {'task_id': task.id})
 
         memory_snapshot = context.recall('memory_snapshot', {})
         strategy = context.get_state('selected_strategy', {}).get('strategy')
@@ -105,6 +112,7 @@ class WorkflowService:
         )
         context.add_timeline_event('memory_persist', 'Stored long-term memory record from workflow output')
         logger.add('memory_persist', 'Long-term memory record stored', {'task_id': task.id})
+        emit_event('memory_persist', 'Long-term memory record stored', {'task_id': task.id})
 
         completed_at = datetime.utcnow()
 
