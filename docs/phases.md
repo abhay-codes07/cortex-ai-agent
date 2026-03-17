@@ -75,6 +75,14 @@
 - [x] Connect dashboard to websocket stream with connection status
 - [x] Update live timeline/log/agent panels from realtime events
 
-## Next Phases
+## Phase 10 - Polish + Demo Mode
 
-- Phase 10: Polish + demo mode
+- [x] Add curated demo scenarios API
+- [x] Add one-click demo autopilot run endpoint
+- [x] Integrate dashboard autopilot controls
+- [x] Finalize docs and launch narrative
+- [x] Finalize no-fail demo helper scripts
+
+## Launch Status
+
+- Cortex is demo-ready and production-structured for hackathon judging.
