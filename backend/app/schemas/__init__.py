@@ -1,4 +1,5 @@
 from app.schemas.agent import AgentNodeStatus, AgentSimulationRequest, AgentSimulationResponse
+from app.schemas.collaboration import CollaborationRunRequest, CollaborationRunResponse, CollaborationSessionsResponse
 from app.schemas.common import ErrorResponse
 from app.schemas.memory import (
     MemoryCreateRequest,
@@ -27,6 +28,9 @@ __all__ = [
     'AgentNodeStatus',
     'AgentSimulationRequest',
     'AgentSimulationResponse',
+    'CollaborationRunRequest',
+    'CollaborationRunResponse',
+    'CollaborationSessionsResponse',
     'ErrorResponse',
     'MemoryCreateRequest',
     'MemoryListResponse',
