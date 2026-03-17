@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { BrainCircuit, Home, RadioTower } from 'lucide-react';
 
 import { AgentNetwork } from '@/components/dashboard/agent-network';
+import { DemoModePanel } from '@/components/dashboard/demo-mode-panel';
 import { LogStream } from '@/components/dashboard/log-stream';
 import { MemoryPanel } from '@/components/dashboard/memory-panel';
 import { MetricChip } from '@/components/dashboard/metric-chip';
@@ -13,10 +14,18 @@ import { TaskComposer } from '@/components/dashboard/task-composer';
 import { TaskHistory } from '@/components/dashboard/task-history';
 import { TimelinePanel } from '@/components/dashboard/timeline-panel';
 import { roleFromStage, statusFromStage } from '@/lib/agent-utils';
-import { listAgents, recallMemory, recentTasks, runCollaboration, runWorkflow } from '@/lib/api';
+import {
+  demoScenarios,
+  listAgents,
+  recallMemory,
+  recentTasks,
+  runCollaboration,
+  runDemoScenario,
+  runWorkflow,
+} from '@/lib/api';
 import { DEMO_TASKS, mockCollaborationResponse, mockWorkflowResponse } from '@/lib/demo';
 import { connectRealtime, type RealtimeConnectionState } from '@/lib/realtime';
-import type { AgentNode, MemoryRecallItem, TimelineEvent } from '@/lib/types';
+import type { AgentNode, DemoScenario, MemoryRecallItem, TimelineEvent } from '@/lib/types';
 
 const fallbackAgents: AgentNode[] = [
   { role: 'orchestrator', name: 'Orchestrator Agent', status: 'ready' },
@@ -29,6 +38,18 @@ const fallbackAgents: AgentNode[] = [
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+function extractTimelineFromDemoResult(result: Record<string, unknown>): TimelineEvent[] {
+  const maybeTimeline = result.timeline;
+  if (Array.isArray(maybeTimeline)) return maybeTimeline as TimelineEvent[];
+
+  const maybeNested = result.result as { timeline?: unknown } | undefined;
+  if (maybeNested && Array.isArray(maybeNested.timeline)) {
+    return maybeNested.timeline as TimelineEvent[];
+  }
+
+  return [];
+}
+
 export default function DashboardPage() {
   const [objective, setObjective] = useState(DEMO_TASKS[0]);
   const [demoMode, setDemoMode] = useState(true);
@@ -40,8 +61,10 @@ export default function DashboardPage() {
   const [memoryItems, setMemoryItems] = useState<MemoryRecallItem[]>([]);
   const [history, setHistory] = useState<Array<{ id: string; title: string; status: string; created_at: string }>>([]);
 
-  const [runMode, setRunMode] = useState<'workflow' | 'collaboration'>('workflow');
+  const [runMode, setRunMode] = useState<'workflow' | 'collaboration' | 'autopilot'>('workflow');
   const [realtimeState, setRealtimeState] = useState<RealtimeConnectionState>('disconnected');
+  const [scenarios, setScenarios] = useState<DemoScenario[]>([]);
+  const [selectedScenarioId, setSelectedScenarioId] = useState('');
 
   const socketRef = useRef<WebSocket | null>(null);
   const liveEventCounterRef = useRef(0);
@@ -55,7 +78,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const bootstrap = async () => {
       try {
-        const [agentRows, tasks] = await Promise.all([listAgents(), recentTasks()]);
+        const [agentRows, tasks, scenarioRows] = await Promise.all([listAgents(), recentTasks(), demoScenarios()]);
         setAgents(
           agentRows.map((agent) => ({
             role: agent.role,
@@ -64,6 +87,8 @@ export default function DashboardPage() {
           })),
         );
         setHistory(tasks);
+        setScenarios(scenarioRows);
+        if (scenarioRows[0]) setSelectedScenarioId(scenarioRows[0].id);
       } catch {
         setLogs((prev) => [...prev, '[bootstrap] API unreachable, using local demo profile']);
       }
@@ -125,7 +150,7 @@ export default function DashboardPage() {
           return agent;
         }),
       );
-      await sleep(110);
+      await sleep(100);
     }
     setAgents((prev) => prev.map((agent) => ({ ...agent, status: 'done' })));
   };
@@ -201,6 +226,43 @@ export default function DashboardPage() {
     }
   };
 
+  const runAutopilot = async () => {
+    if (!selectedScenarioId) return;
+
+    setRunning(true);
+    setTimeline([]);
+    setAgents((prev) => prev.map((agent) => ({ ...agent, status: 'thinking' })));
+    setLogs((prev) => [...prev, `[autopilot] launching scenario ${selectedScenarioId}`]);
+
+    try {
+      const beforeCounter = liveEventCounterRef.current;
+      const result = await runDemoScenario(selectedScenarioId);
+      const events = extractTimelineFromDemoResult(result.result);
+
+      if (liveEventCounterRef.current === beforeCounter || realtimeState !== 'connected') {
+        await streamExperience(events.length > 0 ? events : mockWorkflowResponse(result.scenario.objective).timeline);
+      }
+
+      setObjective(result.scenario.objective);
+      setRunMode('autopilot');
+      setLogs((prev) => [...prev, `[autopilot] scenario complete: ${result.scenario.title}`]);
+
+      try {
+        const tasks = await recentTasks();
+        setHistory(tasks);
+      } catch {
+        // Keep history unchanged.
+      }
+    } catch {
+      setLogs((prev) => [...prev, '[autopilot] backend unavailable, switching to deterministic fallback']);
+      const fallback = mockCollaborationResponse(objective);
+      await streamExperience(fallback.timeline);
+      setRunMode('autopilot');
+    } finally {
+      setRunning(false);
+    }
+  };
+
   return (
     <main className="cortex-grid min-h-screen px-4 py-6 md:px-10 md:py-8">
       <section className="mx-auto flex w-full max-w-[1400px] flex-col gap-5">
@@ -238,17 +300,28 @@ export default function DashboardPage() {
           onToggleDemo={() => setDemoMode((prev) => !prev)}
         />
 
-        <div className="flex flex-wrap gap-2">
-          {DEMO_TASKS.map((task) => (
-            <button
-              key={task}
-              type="button"
-              onClick={() => setObjective(task)}
-              className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-[#d4e0f4] hover:bg-white/10"
-            >
-              {task.slice(0, 74)}
-            </button>
-          ))}
+        <div className="grid gap-4 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            <div className="flex flex-wrap gap-2">
+              {DEMO_TASKS.map((task) => (
+                <button
+                  key={task}
+                  type="button"
+                  onClick={() => setObjective(task)}
+                  className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-[#d4e0f4] hover:bg-white/10"
+                >
+                  {task.slice(0, 74)}
+                </button>
+              ))}
+            </div>
+          </div>
+          <DemoModePanel
+            scenarios={scenarios}
+            selectedScenarioId={selectedScenarioId}
+            onSelectScenario={setSelectedScenarioId}
+            onRunScenario={() => void runAutopilot()}
+            running={running}
+          />
         </div>
 
         <div className="grid gap-4 xl:grid-cols-3">
