@@ -1,4 +1,4 @@
-# API Reference (Phase 7)
+# API Reference (Phase 9)
 
 ## Health and system
 
@@ -6,6 +6,11 @@
 - `GET /api/v1/status`
 - `GET /api/v1/meta`
 - `GET /api/v1/system`
+
+## Realtime
+
+- `GET /api/v1/realtime/status`
+- `WS /api/v1/realtime/ws`
 
 ## Tasks
 
@@ -42,12 +47,17 @@
 - `POST /api/v1/tools/execute`
 - `POST /api/v1/tools/execute/batch`
 
-## Collaboration run request
+## Realtime event shape
 
 ```json
 {
-  "title": "Collab demo",
-  "objective": "Coordinate a launch plan where multiple AI agents collaborate in real-time with tool calls.",
-  "rounds": 2
+  "id": "uuid",
+  "type": "event",
+  "stage": "executing",
+  "message": "execution agent started",
+  "metadata": {
+    "task_id": "..."
+  },
+  "timestamp": "2026-03-17T00:00:00.000000"
 }
 ```
