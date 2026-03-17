@@ -18,6 +18,7 @@ class MemoryAgent(BaseAgent):
             'workflow_mode': context.get_state('workflow_mode', 'iterative-safe'),
             'plan_steps': context.recall('plan_steps', []),
             'deliverables': context.get_state('deliverables', []),
+            'tool_results': context.get_state('tool_results', []),
             'captured_at': datetime.utcnow().isoformat(),
         }
 
