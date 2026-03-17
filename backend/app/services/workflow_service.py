@@ -12,12 +12,14 @@ from app.schemas.task import TaskCreateRequest, TaskUpdateStatusRequest
 from app.schemas.workflow import WorkflowRunRequest, WorkflowRunResponse
 from app.services.memory_service import MemoryService
 from app.services.task_service import TaskService
+from app.services.tool_service import ToolService
 
 
 class WorkflowService:
     def __init__(self, db: Session):
         self.task_service = TaskService(db)
         self.memory_service = MemoryService(db)
+        self.tool_service = ToolService()
         self.registry = build_default_registry()
         self.runtime = AgentRuntime(self.registry)
         self.coordinator = OrchestrationCoordinator()
@@ -33,6 +35,14 @@ class WorkflowService:
 
         logger = WorkflowEventLogger()
         context = self.coordinator.prepare_context(task_id=task.id, objective=payload.objective)
+
+        def tool_executor(name: str, data: dict):
+            result = self.tool_service.execute_tool(name, data)
+            context.add_timeline_event('tool_execution', f"Tool executed: {name}", {'status': result.status})
+            logger.add('tool_execution', f"Tool executed: {name}", {'status': result.status})
+            return result
+
+        context.set_state('tool_executor', tool_executor)
 
         recalled_memory = self.memory_service.recall(MemoryRecallRequest(objective=payload.objective, limit=3))
         hints = [item.summary for item in recalled_memory.items[:2]]
@@ -55,7 +65,11 @@ class WorkflowService:
 
         transcript = self.runtime.run_once(context, on_step=on_step)
 
-        final_summary = 'Workflow executed successfully with orchestrator-planner intelligence enabled.'
+        tool_results = context.get_state('tool_results', [])
+        final_summary = (
+            'Workflow executed successfully with orchestrator-planner intelligence and tool execution enabled. '
+            f"Tool calls: {len(tool_results)}."
+        )
         final_task = self.task_service.update_status(
             task.id,
             TaskUpdateStatusRequest(status=TaskStatus.completed, result=final_summary, error=None),
@@ -75,7 +89,7 @@ class WorkflowService:
             f"Workflow mode {memory_snapshot.get('workflow_mode', 'iterative-safe')} with {len(plan_steps)} plan steps and "
             f"{len(deliverables)} deliverables."
         )
-        memory_tags = ['workflow', memory_snapshot.get('workflow_mode', 'iterative-safe'), strategy or 'unknown']
+        memory_tags = ['workflow', memory_snapshot.get('workflow_mode', 'iterative-safe'), strategy or 'unknown', 'tools']
 
         self.memory_service.create_record(
             MemoryCreateRequest(
