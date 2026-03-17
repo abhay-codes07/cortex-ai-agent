@@ -1,4 +1,4 @@
-# API Reference (Phase 4)
+# API Reference (Phase 5)
 
 ## Health and system
 
@@ -25,11 +25,17 @@
 
 - `POST /api/v1/workflows/run`
 
-## Workflow run request
+## Memory
+
+- `POST /api/v1/memory/records`
+- `GET /api/v1/memory/recent`
+- `POST /api/v1/memory/recall`
+
+## Memory recall request
 
 ```json
 {
-  "title": "Launch sprint",
-  "objective": "Plan and execute a startup launch sprint with clear milestones and timeline outputs."
+  "objective": "Plan and execute a startup launch sprint with clear milestones and timeline outputs.",
+  "limit": 5
 }
 ```
