@@ -15,6 +15,8 @@ class PlannerAgent(BaseAgent):
 
     def run(self, context: RuntimeContext) -> AgentResult:
         profile_data = context.recall('objective_profile', {})
+        memory_hints = context.recall('memory_hints', [])
+
         profile = self.analyzer.from_scores(
             objective=context.objective,
             complexity=int(profile_data.get('complexity_score', 1)),
@@ -24,11 +26,17 @@ class PlannerAgent(BaseAgent):
         milestones = self.milestone_planner.build(profile)
         plan_steps = self.formatter.summarize(milestones)
 
+        if memory_hints:
+            plan_steps.append(f"Prior memory insight: {memory_hints[0]}")
+
         thought = self.thought(
             step='Break objective into plan',
             reasoning=f'{PLANNER_PROMPT} Built {len(plan_steps)} milestones tuned for complexity score {profile.complexity_score}.',
         )
-        action = self.action('draft_plan', {'steps': plan_steps, 'milestone_count': len(milestones)})
+        action = self.action(
+            'draft_plan',
+            {'steps': plan_steps, 'milestone_count': len(milestones), 'memory_hints_count': len(memory_hints)},
+        )
         message = self.message(AgentRole.research, 'Gather evidence and options aligned with these milestones.')
 
         context.remember('plan_steps', plan_steps)
