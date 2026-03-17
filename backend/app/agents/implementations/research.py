@@ -12,6 +12,7 @@ class ResearchAgent(BaseAgent):
     def run(self, context: RuntimeContext) -> AgentResult:
         plan_steps = context.recall('plan_steps', [])
         workflow_mode = context.get_state('workflow_mode', 'iterative-safe')
+        inbox = context.read_inbox(self.role.value)
 
         findings = [
             'Fast iteration beats oversized upfront planning for demo velocity.',
@@ -21,6 +22,8 @@ class ResearchAgent(BaseAgent):
 
         if len(plan_steps) >= 5:
             findings.append('Complex plans benefit from orchestration checkpoints before execution handoff.')
+        if inbox:
+            findings.append('Collaboration messages suggest refining assumptions before final decision step.')
 
         thought = self.thought(
             step='Collect references and context',
