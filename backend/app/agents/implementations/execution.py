@@ -11,21 +11,26 @@ class ExecutionAgent(BaseAgent):
 
     def run(self, context: RuntimeContext) -> AgentResult:
         strategy = context.get_state('selected_strategy', {})
+        milestones = context.recall('plan_milestones', [])
 
         deliverables = [
-            'Task parsed and execution lane activated',
-            'Milestones generated and validated',
-            'Outcome packaged for user delivery',
+            'Objective interpreted and execution lane activated',
+            'Milestones completed with status evidence',
+            'Final output packaged for stakeholder review',
         ]
+
+        if milestones:
+            deliverables.append(f"Executed {len(milestones)} planned milestones in coordinated sequence")
 
         thought = self.thought(
             step='Execute selected strategy',
-            reasoning=f'{EXECUTION_PROMPT} Applying selected strategy into concrete deliverables with clear completion evidence.',
+            reasoning=f'{EXECUTION_PROMPT} Applying strategy into concrete deliverables with milestone-level completion evidence.',
         )
         action = self.action('execute_plan', {'strategy': strategy.get('strategy', 'default'), 'deliverables': deliverables})
         message = self.message(AgentRole.memory, 'Store execution context and outcomes for future recall.')
 
         context.set_state('deliverables', deliverables)
+        context.add_timeline_event('executing', 'Execution agent completed deliverable run', {'deliverables': len(deliverables)})
 
         return AgentResult(
             agent=self.role,
