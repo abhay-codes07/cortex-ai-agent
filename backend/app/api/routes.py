@@ -1,22 +1,9 @@
 from fastapi import APIRouter
 
+from app.api.v1 import health, system, tasks
+from app.core.config import settings
+
 router = APIRouter()
-
-
-@router.get('/health')
-def health_check() -> dict[str, str]:
-    return {'status': 'ok', 'service': 'cortex-backend'}
-
-
-@router.get('/api/v1/status')
-def app_status() -> dict[str, str]:
-    return {'phase': '1', 'message': 'Backend scaffold ready'}
-
-
-@router.get('/api/v1/meta')
-def app_meta() -> dict[str, str | list[str]]:
-    return {
-        'product': 'Cortex',
-        'mode': 'phase-1-foundation',
-        'next': ['backend-core-apis', 'agent-base-system', 'orchestrator-planner'],
-    }
+router.include_router(health.router, tags=['health'])
+router.include_router(system.router, prefix=settings.api_v1_prefix, tags=['system'])
+router.include_router(tasks.router, prefix=settings.api_v1_prefix, tags=['tasks'])
