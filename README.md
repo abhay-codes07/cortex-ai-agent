@@ -1,67 +1,126 @@
 # Cortex - Autonomous AI Workforce
 
-A YC-style, demo-first multi-agent product where a team of AI agents plans, collaborates, executes, and learns from memory.
+## ?? Vision
 
-## Vision
+Cortex is not a chatbot. It is an autonomous AI workforce.
 
-Cortex is not a chatbot. It is an autonomous AI workforce. You submit one objective, and specialized AI agents coordinate to deliver outcomes with visible reasoning and live execution logs.
+You provide a mission. A team of specialized AI agents gets to work in real time: planning, researching, deciding, executing, coordinating, and learning from memory.
 
-## What Is Live In Phase 9
+The product is designed to impress judges in under 30 seconds through visible intelligence, live execution, and deterministic demo reliability.
 
-- Premium frontend command dashboard with mission control, agent network, logs, timeline, memory, and history panels
-- Full backend API surface for tasks, workflows, collaboration, tools, and memory
-- Realtime websocket streaming layer from backend to dashboard
-- Live run telemetry:
-  - agent step transitions
-  - tool execution events
-  - task status updates
-  - memory recall/persist events
-- Deterministic fallback simulation remains available for fail-safe demos
+## ?? How It Works
 
-## Backend API Surface
+1. User submits an objective in the dashboard mission control.
+2. Orchestrator profiles complexity and selects execution mode.
+3. Planner generates milestone plan with owners and outcomes.
+4. Research + Decision agents refine strategy with collaboration loops.
+5. Execution agent calls tools (`web_search`, `execute_task`, `send_slack`, `send_email`).
+6. Memory agent captures short-term context and persists long-term memory.
+7. Realtime events stream over WebSockets to update the UI live.
 
-- `GET /health`
-- `GET /api/v1/status`
-- `GET /api/v1/meta`
-- `GET /api/v1/system`
-- `GET /api/v1/realtime/status`
-- `WS /api/v1/realtime/ws`
-- `POST /api/v1/tasks`
-- `GET /api/v1/tasks`
-- `GET /api/v1/tasks/{task_id}`
-- `PATCH /api/v1/tasks/{task_id}/status`
-- `POST /api/v1/tasks/{task_id}/start`
-- `GET /api/v1/tasks/summary`
-- `GET /api/v1/agents`
-- `POST /api/v1/agents/simulate`
-- `POST /api/v1/workflows/run`
-- `POST /api/v1/collaboration/run`
-- `GET /api/v1/collaboration/sessions`
-- `POST /api/v1/memory/records`
-- `GET /api/v1/memory/recent`
-- `POST /api/v1/memory/recall`
-- `GET /api/v1/tools`
-- `POST /api/v1/tools/execute`
-- `POST /api/v1/tools/execute/batch`
+## ?? Architecture
 
-## Demo Helpers
+### Frontend
 
-- `powershell ./scripts/demo-agent-simulate.ps1`
-- `powershell ./scripts/demo-workflow-run.ps1`
-- `powershell ./scripts/demo-memory-recall.ps1`
-- `powershell ./scripts/demo-tools.ps1`
-- `powershell ./scripts/demo-collaboration-run.ps1`
-- `powershell ./scripts/demo-realtime-status.ps1`
+- Next.js App Router
+- TailwindCSS
+- Framer Motion
+- Premium multi-panel dashboard:
+  - mission control
+  - agent network visualization
+  - live logs
+  - timeline
+  - memory recall
+  - history
+  - demo autopilot
 
-## Phase Plan
+### Backend
 
-- Phase 1: Setup and repo initialization (complete)
-- Phase 2: Backend core APIs (complete)
-- Phase 3: Agent base system (complete)
-- Phase 4: Orchestrator + planner workflow intelligence (complete)
-- Phase 5: Memory system (complete)
-- Phase 6: Tool execution layer (complete)
-- Phase 7: Multi-agent collaboration (complete)
-- Phase 8: Premium dashboard UI (complete)
-- Phase 9: Realtime websocket stream (complete)
-- Phase 10: Demo mode and polish
+- FastAPI
+- PostgreSQL (tasks + long-term memory)
+- Redis (caching)
+- Realtime WebSocket manager and event bus
+
+### Agent System
+
+- Orchestrator Agent
+- Planner Agent
+- Research Agent
+- Decision Agent
+- Execution Agent
+- Memory Agent
+
+### Collaboration + Runtime
+
+- Multi-round collaboration coordinator
+- Inter-agent message bus and inbox delivery
+- Structured transcript generation
+- Workflow orchestration with state transitions
+
+### Tooling Layer
+
+- Email simulator
+- Slack simulator
+- Web search mock
+- Task executor
+- Tool registry + batch execution endpoints
+
+## ? Tech Stack
+
+- Frontend: Next.js, TypeScript, TailwindCSS, Framer Motion, Lucide
+- Backend: FastAPI, Pydantic, SQLAlchemy
+- Data: PostgreSQL, Redis
+- Realtime: WebSockets
+- DevOps: Docker Compose
+
+## ?? Demo Instructions
+
+### 1) Start infrastructure
+
+```bash
+docker compose -f infra/docker-compose.yml up -d
+```
+
+### 2) Start backend
+
+```bash
+cd backend
+powershell ./run.ps1
+```
+
+### 3) Start frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### 4) Open dashboard
+
+- `http://localhost:3000/dashboard`
+
+### 5) Run judge-safe demos
+
+```bash
+powershell ./scripts/demo-workflow-run.ps1
+powershell ./scripts/demo-collaboration-run.ps1
+powershell ./scripts/demo-realtime-status.ps1
+powershell ./scripts/demo-autopilot.ps1
+```
+
+## ?? Screenshots
+
+- `docs/screenshots/landing.png` (placeholder)
+- `docs/screenshots/dashboard-overview.png` (placeholder)
+- `docs/screenshots/live-collaboration.png` (placeholder)
+- `docs/screenshots/realtime-stream.png` (placeholder)
+- `docs/screenshots/demo-autopilot.png` (placeholder)
+
+## ?? Why This Wins
+
+- Visible multi-agent coordination, not static chat output
+- Live realtime stream of reasoning, actions, and tool calls
+- Memory-backed behavior with recall + persistence loop
+- Deterministic one-click demo autopilot for no-fail judging
+- Clean modular architecture that scales beyond hackathon scope
