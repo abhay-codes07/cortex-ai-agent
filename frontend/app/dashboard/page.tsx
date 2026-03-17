@@ -24,6 +24,7 @@ import {
   runWorkflow,
 } from '@/lib/api';
 import { DEMO_TASKS, mockCollaborationResponse, mockWorkflowResponse } from '@/lib/demo';
+import { extractTimelineFromDemoResult } from '@/lib/demo-utils';
 import { connectRealtime, type RealtimeConnectionState } from '@/lib/realtime';
 import type { AgentNode, DemoScenario, MemoryRecallItem, TimelineEvent } from '@/lib/types';
 
@@ -37,18 +38,6 @@ const fallbackAgents: AgentNode[] = [
 ];
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-function extractTimelineFromDemoResult(result: Record<string, unknown>): TimelineEvent[] {
-  const maybeTimeline = result.timeline;
-  if (Array.isArray(maybeTimeline)) return maybeTimeline as TimelineEvent[];
-
-  const maybeNested = result.result as { timeline?: unknown } | undefined;
-  if (maybeNested && Array.isArray(maybeNested.timeline)) {
-    return maybeNested.timeline as TimelineEvent[];
-  }
-
-  return [];
-}
 
 export default function DashboardPage() {
   const [objective, setObjective] = useState(DEMO_TASKS[0]);
