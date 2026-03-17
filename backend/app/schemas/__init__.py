@@ -1,5 +1,12 @@
 from app.schemas.agent import AgentNodeStatus, AgentSimulationRequest, AgentSimulationResponse
 from app.schemas.common import ErrorResponse
+from app.schemas.memory import (
+    MemoryCreateRequest,
+    MemoryListResponse,
+    MemoryRecallRequest,
+    MemoryRecallResponse,
+    MemoryRecordResponse,
+)
 from app.schemas.task import (
     TaskCreateRequest,
     TaskListResponse,
@@ -14,6 +21,11 @@ __all__ = [
     'AgentSimulationRequest',
     'AgentSimulationResponse',
     'ErrorResponse',
+    'MemoryCreateRequest',
+    'MemoryListResponse',
+    'MemoryRecallRequest',
+    'MemoryRecallResponse',
+    'MemoryRecordResponse',
     'TaskCreateRequest',
     'TaskUpdateStatusRequest',
     'TaskResponse',
