@@ -1,0 +1,14 @@
+{
+  "name": "cortex-ai-agent",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Cortex monorepo",
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build:frontend": "npm --prefix frontend run build",
+    "lint:frontend": "npm --prefix frontend run lint"
+  }
+}
