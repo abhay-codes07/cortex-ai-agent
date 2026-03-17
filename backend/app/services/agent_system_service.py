@@ -30,5 +30,5 @@ class AgentSystemService:
             started_at=started_at,
             completed_at=completed_at,
             nodes=self.list_nodes(),
-            transcript=transcript.as_dict(),
+            transcript=transcript.as_dict(timeline=context.timeline_events),
         )
