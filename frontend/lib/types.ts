@@ -47,3 +47,18 @@ export type MemoryRecallItem = {
   strategy?: string | null;
   relevance_score?: number | null;
 };
+
+export type DemoScenario = {
+  id: string;
+  title: string;
+  objective: string;
+  mode: string;
+  rounds: number;
+};
+
+export type DemoRunResponse = {
+  scenario: DemoScenario;
+  started_at: string;
+  completed_at: string;
+  result: Record<string, unknown>;
+};
