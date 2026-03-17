@@ -1,11 +1,15 @@
-# Agent Workflow (Phase 5)
+# Agent Workflow (Phase 6)
 
-1. Workflow starts by recalling relevant long-term memory records from PostgreSQL + Redis cache.
-2. Orchestrator analyzes objective complexity and uses memory hints to choose workflow mode.
-3. Planner generates milestone plan and injects strongest recalled insight.
-4. Research aligns findings to planned milestones.
-5. Decision selects strategy from profile + findings.
-6. Execution completes deliverables with milestone evidence.
-7. Memory agent captures snapshot and workflow service persists long-term memory record.
+1. Workflow starts by recalling relevant long-term memory records.
+2. Orchestrator selects execution mode and shares context.
+3. Planner creates milestone-driven plan.
+4. Research and decision agents finalize strategy.
+5. Execution agent calls tools through abstraction layer:
+   - `web_search`
+   - `execute_task`
+   - `send_slack`
+   - `send_email`
+6. Memory agent captures snapshot including tool outputs.
+7. Workflow persists long-term memory record.
 
-This produces an end-to-end memory loop: recall before execution, persist after execution.
+The transcript now contains concrete tool-execution evidence for demo impact.
