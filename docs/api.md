@@ -1,4 +1,4 @@
-# API Reference (Phase 3)
+# API Reference (Phase 4)
 
 ## Health and system
 
@@ -21,11 +21,15 @@
 - `GET /api/v1/agents`
 - `POST /api/v1/agents/simulate`
 
-## Agent simulation request
+## Workflows
+
+- `POST /api/v1/workflows/run`
+
+## Workflow run request
 
 ```json
 {
-  "task_id": "demo-task-001",
-  "objective": "Plan and execute a product launch sprint with clear milestones and owner handoffs."
+  "title": "Launch sprint",
+  "objective": "Plan and execute a startup launch sprint with clear milestones and timeline outputs."
 }
 ```

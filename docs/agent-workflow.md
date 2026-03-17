@@ -1,10 +1,10 @@
-# Agent Workflow (Phase 3)
+# Agent Workflow (Phase 4)
 
-1. Orchestrator receives objective and activates workflow order.
-2. Planner generates execution milestones.
-3. Research compiles supporting findings.
-4. Decision selects best strategy from evidence.
-5. Execution produces deliverables.
-6. Memory captures context snapshot for future recall.
+1. Orchestrator analyzes objective complexity and selects workflow mode.
+2. Planner generates milestone plan with owners and outcomes.
+3. Research aligns findings to planned milestones.
+4. Decision selects strategy from profile + findings.
+5. Execution completes deliverables with milestone evidence.
+6. Memory captures run snapshot for persistence handoff.
 
-The runtime currently executes deterministically for demo reliability.
+Each stage emits timeline events and task status transitions for realtime UX.
