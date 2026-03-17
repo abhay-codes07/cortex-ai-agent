@@ -12,6 +12,7 @@ class MemoryAgent(BaseAgent):
         super().__init__(role=AgentRole.memory, name='Memory Agent')
 
     def run(self, context: RuntimeContext) -> AgentResult:
+        inbox = context.read_inbox(self.role.value)
         snapshot = {
             'task_id': context.task_id,
             'objective': context.objective,
@@ -19,6 +20,7 @@ class MemoryAgent(BaseAgent):
             'plan_steps': context.recall('plan_steps', []),
             'deliverables': context.get_state('deliverables', []),
             'tool_results': context.get_state('tool_results', []),
+            'collaboration_messages': inbox,
             'captured_at': datetime.utcnow().isoformat(),
         }
 
