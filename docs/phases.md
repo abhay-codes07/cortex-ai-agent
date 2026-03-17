@@ -42,9 +42,16 @@
 - [x] Add Redis-cached memory recall responses
 - [x] Integrate recall-before-run and persist-after-run workflow loop
 
+## Phase 6 - Tool Execution
+
+- [x] Add tool abstraction and registry
+- [x] Add email/slack/search/task executor tools
+- [x] Add tool service and execution endpoints
+- [x] Integrate tool execution into workflow runtime
+- [x] Persist tool outputs in memory snapshots
+
 ## Next Phases
 
-- Phase 6: Tool execution
 - Phase 7: Multi-agent collaboration
 - Phase 8: Frontend luxury UI
 - Phase 9: Realtime WebSockets
