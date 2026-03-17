@@ -9,6 +9,7 @@ class RuntimeContext:
     objective: str
     short_term_memory: dict[str, Any] = field(default_factory=dict)
     shared_state: dict[str, Any] = field(default_factory=dict)
+    timeline_events: list[dict[str, Any]] = field(default_factory=list)
     started_at: datetime = field(default_factory=datetime.utcnow)
 
     def remember(self, key: str, value: Any) -> None:
@@ -22,3 +23,13 @@ class RuntimeContext:
 
     def get_state(self, key: str, default: Any = None) -> Any:
         return self.shared_state.get(key, default)
+
+    def add_timeline_event(self, stage: str, message: str, metadata: dict[str, Any] | None = None) -> None:
+        self.timeline_events.append(
+            {
+                'stage': stage,
+                'message': message,
+                'metadata': metadata or {},
+                'timestamp': datetime.utcnow().isoformat(),
+            }
+        )
