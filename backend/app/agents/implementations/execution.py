@@ -12,6 +12,7 @@ class ExecutionAgent(BaseAgent):
     def run(self, context: RuntimeContext) -> AgentResult:
         strategy = context.get_state('selected_strategy', {})
         milestones = context.recall('plan_milestones', [])
+        inbox = context.read_inbox(self.role.value)
 
         tool_executor = context.get_state('tool_executor')
         tool_results: list[dict] = []
@@ -59,6 +60,8 @@ class ExecutionAgent(BaseAgent):
             deliverables.append(f"Executed {len(milestones)} planned milestones in coordinated sequence")
         if tool_results:
             deliverables.append(f"Executed {len(tool_results)} tool operations through tool abstraction layer")
+        if inbox:
+            deliverables.append(f"Processed {len(inbox)} collaboration messages before final execution")
 
         thought = self.thought(
             step='Execute selected strategy',
@@ -70,6 +73,7 @@ class ExecutionAgent(BaseAgent):
                 'strategy': strategy.get('strategy', 'default'),
                 'deliverables': deliverables,
                 'tool_calls': len(tool_results),
+                'inbox_messages': len(inbox),
             },
         )
         message = self.message(AgentRole.memory, 'Store execution context and outcomes for future recall.')
