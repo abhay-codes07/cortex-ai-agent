@@ -20,7 +20,7 @@ class CacheService:
                 self._client = None
         return self._client
 
-    def get_json(self, key: str) -> dict[str, Any] | None:
+    def get_json(self, key: str) -> Any | None:
         client = self._client_or_none()
         if not client:
             return None
@@ -34,7 +34,7 @@ class CacheService:
         except json.JSONDecodeError:
             return None
 
-    def set_json(self, key: str, value: dict[str, Any], ttl: int | None = None) -> None:
+    def set_json(self, key: str, value: Any, ttl: int | None = None) -> None:
         client = self._client_or_none()
         if not client:
             return
