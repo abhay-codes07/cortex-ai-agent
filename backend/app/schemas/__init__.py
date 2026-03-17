@@ -7,6 +7,7 @@ from app.schemas.task import (
     TaskSummaryResponse,
     TaskUpdateStatusRequest,
 )
+from app.schemas.workflow import WorkflowRunRequest, WorkflowRunResponse
 
 __all__ = [
     'AgentNodeStatus',
@@ -18,4 +19,6 @@ __all__ = [
     'TaskResponse',
     'TaskListResponse',
     'TaskSummaryResponse',
+    'WorkflowRunRequest',
+    'WorkflowRunResponse',
 ]
