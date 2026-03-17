@@ -10,19 +10,31 @@ class ResearchAgent(BaseAgent):
         super().__init__(role=AgentRole.research, name='Research Agent')
 
     def run(self, context: RuntimeContext) -> AgentResult:
+        plan_steps = context.recall('plan_steps', [])
+        workflow_mode = context.get_state('workflow_mode', 'iterative-safe')
+
         findings = [
-            'Market pattern indicates fast iteration wins over large upfront planning.',
-            'Concise execution milestones improve completion probability.',
-            'Visible progress logs increase stakeholder trust during autonomous runs.',
+            'Fast iteration beats oversized upfront planning for demo velocity.',
+            'Visible milestone updates increase confidence in autonomous systems.',
+            f'Workflow mode {workflow_mode} should prioritize transparent status transitions.',
         ]
+
+        if len(plan_steps) >= 5:
+            findings.append('Complex plans benefit from orchestration checkpoints before execution handoff.')
+
         thought = self.thought(
             step='Collect references and context',
-            reasoning=f'{RESEARCH_PROMPT} Compiling synthesized findings that the decision agent can evaluate for final path selection.',
+            reasoning=f'{RESEARCH_PROMPT} Compiling findings that directly support planner milestones and orchestration mode.',
         )
-        action = self.action('collect_findings', {'findings_count': len(findings)})
-        message = self.message(AgentRole.decision, 'Use these findings to select the best execution strategy.', {'findings': findings})
+        action = self.action('collect_findings', {'findings_count': len(findings), 'aligned_plan_steps': len(plan_steps)})
+        message = self.message(
+            AgentRole.decision,
+            'Use these findings to select the best execution strategy.',
+            {'findings': findings},
+        )
 
         context.remember('research_findings', findings)
+        context.add_timeline_event('researching', 'Research agent synthesized findings', {'findings': len(findings)})
 
         return AgentResult(
             agent=self.role,
