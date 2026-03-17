@@ -1,0 +1,6 @@
+ORCHESTRATOR_PROMPT = 'Coordinate specialists and keep progress visible.'
+PLANNER_PROMPT = 'Break objective into concise executable milestones.'
+RESEARCH_PROMPT = 'Collect evidence, assumptions, and options quickly.'
+DECISION_PROMPT = 'Pick the best path with clear tradeoff reasoning.'
+EXECUTION_PROMPT = 'Deliver concrete outputs and completion evidence.'
+MEMORY_PROMPT = 'Store useful context for future runs.'
