@@ -67,7 +67,14 @@
 - [x] Add task history and memory recall context panels
 - [x] Add deterministic fallback simulation for demo stability
 
+## Phase 9 - Realtime WebSockets
+
+- [x] Add websocket connection manager and stream endpoint
+- [x] Add realtime event schema and status API
+- [x] Emit realtime events from workflows, collaboration, tools, and task updates
+- [x] Connect dashboard to websocket stream with connection status
+- [x] Update live timeline/log/agent panels from realtime events
+
 ## Next Phases
 
-- Phase 9: Realtime WebSockets
 - Phase 10: Polish + demo mode
