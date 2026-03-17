@@ -14,6 +14,13 @@ from app.schemas.task import (
     TaskSummaryResponse,
     TaskUpdateStatusRequest,
 )
+from app.schemas.tool import (
+    ToolBatchExecuteRequest,
+    ToolBatchExecuteResponse,
+    ToolDescriptor,
+    ToolExecuteRequest,
+    ToolExecuteResponse,
+)
 from app.schemas.workflow import WorkflowRunRequest, WorkflowRunResponse
 
 __all__ = [
@@ -31,6 +38,11 @@ __all__ = [
     'TaskResponse',
     'TaskListResponse',
     'TaskSummaryResponse',
+    'ToolDescriptor',
+    'ToolExecuteRequest',
+    'ToolExecuteResponse',
+    'ToolBatchExecuteRequest',
+    'ToolBatchExecuteResponse',
     'WorkflowRunRequest',
     'WorkflowRunResponse',
 ]
