@@ -1,94 +1,103 @@
 # Cortex - Autonomous AI Workforce
 
-## ?? Vision
+Autonomous multi-agent system that plans, reasons, and executes tasks in real time.
 
-Cortex is not a chatbot. It is an autonomous AI workforce.
+![Python](https://img.shields.io/badge/Python-3.11%2B-0F172A?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-0F172A?style=for-the-badge&logo=fastapi&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-Frontend-0F172A?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Data-0F172A?style=for-the-badge&logo=postgresql&logoColor=white)
+![Hackathon Project](https://img.shields.io/badge/Hackathon-Airia%20AI%20Agents-0F172A?style=for-the-badge)
 
-You provide a mission. A team of specialized AI agents gets to work in real time: planning, researching, deciding, executing, coordinating, and learning from memory.
+---
 
-The product is designed to impress judges in under 30 seconds through visible intelligence, live execution, and deterministic demo reliability.
+## What It Feels Like
 
-## ?? How It Works
+You give a task -> a team of AI agents gets to work.
 
-1. User submits an objective in the dashboard mission control.
-2. Orchestrator profiles complexity and selects execution mode.
-3. Planner generates milestone plan with owners and outcomes.
-4. Research + Decision agents refine strategy with collaboration loops.
-5. Execution agent calls tools (`web_search`, `execute_task`, `send_slack`, `send_email`).
-6. Memory agent captures short-term context and persists long-term memory.
-7. Realtime events stream over WebSockets to update the UI live.
+- Plan
+- Research
+- Decide
+- Execute
+- Learn
 
-## ?? Architecture
+---
 
-### Frontend
+## Agent Flow Diagram
 
-- Next.js App Router
-- TailwindCSS
-- Framer Motion
-- Premium multi-panel dashboard:
-  - mission control
-  - agent network visualization
-  - live logs
-  - timeline
-  - memory recall
-  - history
-  - demo autopilot
-
-### Backend
-
-- FastAPI
-- PostgreSQL (tasks + long-term memory)
-- Redis (caching)
-- Realtime WebSocket manager and event bus
-
-### Agent System
-
-- Orchestrator Agent
-- Planner Agent
-- Research Agent
-- Decision Agent
-- Execution Agent
-- Memory Agent
-
-### Collaboration + Runtime
-
-- Multi-round collaboration coordinator
-- Inter-agent message bus and inbox delivery
-- Structured transcript generation
-- Workflow orchestration with state transitions
-
-### Tooling Layer
-
-- Email simulator
-- Slack simulator
-- Web search mock
-- Task executor
-- Tool registry + batch execution endpoints
-
-## ? Tech Stack
-
-- Frontend: Next.js, TypeScript, TailwindCSS, Framer Motion, Lucide
-- Backend: FastAPI, Pydantic, SQLAlchemy
-- Data: PostgreSQL, Redis
-- Realtime: WebSockets
-- DevOps: Docker Compose
-
-## ?? Demo Instructions
-
-### 1) Start infrastructure
-
-```bash
-docker compose -f infra/docker-compose.yml up -d
+```mermaid
+flowchart LR
+    U[User Task] --> O[Orchestrator]
+    O --> P[Planner]
+    P --> R[Research]
+    R --> D[Decision]
+    D --> E[Execution]
+    E --> M[Memory]
 ```
 
-### 2) Start backend
+---
+
+## System Architecture
+
+```mermaid
+flowchart LR
+    F[Frontend<br/>Next.js Dashboard] --> B[Backend<br/>FastAPI]
+    B --> A[Agent Runtime]
+    A --> T[Tool Layer]
+    B --> DB[(PostgreSQL + Redis)]
+    T --> DB
+```
+
+---
+
+## Agents Overview
+
+| Agent | Role |
+|---|---|
+| Orchestrator Agent | Coordinates the full workflow and agent handoffs |
+| Planner Agent | Breaks objectives into actionable milestones |
+| Research Agent | Gathers context and supporting signals |
+| Decision Agent | Chooses strategy from available evidence |
+| Execution Agent | Runs tool-driven actions and completes tasks |
+| Memory Agent | Stores short-term + long-term context for recall |
+
+---
+
+## Key Features
+
+- `?` Real-time execution
+- `??` Multi-agent collaboration
+- `??` Memory system
+- `??` Tool calling
+- `??` Live logs
+
+---
+
+## Demo
+
+Demo mode runs curated scenarios with one-click autopilot for reliable judging.
+
+![Demo](docs/demo.gif)
+
+---
+
+## UI Preview
+
+![Dashboard](docs/dashboard.png)
+
+---
+
+## Quick Start
+
+```bash
+git clone https://github.com/abhay-codes07/cortex-ai-agent.git
+cd cortex-ai-agent
+docker compose -f infra/docker-compose.yml up -d
+```
 
 ```bash
 cd backend
 powershell ./run.ps1
 ```
-
-### 3) Start frontend
 
 ```bash
 cd frontend
@@ -96,31 +105,13 @@ npm install
 npm run dev
 ```
 
-### 4) Open dashboard
+Open: `http://localhost:3000/dashboard`
 
-- `http://localhost:3000/dashboard`
+---
 
-### 5) Run judge-safe demos
+## Why This Is Different
 
-```bash
-powershell ./scripts/demo-workflow-run.ps1
-powershell ./scripts/demo-collaboration-run.ps1
-powershell ./scripts/demo-realtime-status.ps1
-powershell ./scripts/demo-autopilot.ps1
-```
-
-## ?? Screenshots
-
-- `docs/screenshots/landing.png` (placeholder)
-- `docs/screenshots/dashboard-overview.png` (placeholder)
-- `docs/screenshots/live-collaboration.png` (placeholder)
-- `docs/screenshots/realtime-stream.png` (placeholder)
-- `docs/screenshots/demo-autopilot.png` (placeholder)
-
-## ?? Why This Wins
-
-- Visible multi-agent coordination, not static chat output
-- Live realtime stream of reasoning, actions, and tool calls
-- Memory-backed behavior with recall + persistence loop
-- Deterministic one-click demo autopilot for no-fail judging
-- Clean modular architecture that scales beyond hackathon scope
+- Not chatbot -> execution system
+- Visible reasoning and runtime traces
+- True multi-agent coordination
+- Real-time intelligence in action
