@@ -50,9 +50,16 @@
 - [x] Integrate tool execution into workflow runtime
 - [x] Persist tool outputs in memory snapshots
 
+## Phase 7 - Multi-Agent Collaboration
+
+- [x] Add collaboration message bus
+- [x] Add multi-round collaboration runtime coordinator
+- [x] Add collaboration session model and event logs
+- [x] Add collaboration run and session APIs
+- [x] Integrate inbox-aware agent behavior across rounds
+
 ## Next Phases
 
-- Phase 7: Multi-agent collaboration
 - Phase 8: Frontend luxury UI
 - Phase 9: Realtime WebSockets
 - Phase 10: Polish + demo mode
