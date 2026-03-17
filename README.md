@@ -6,16 +6,16 @@ A YC-style, demo-first multi-agent product where a team of AI agents plans, coll
 
 Cortex is not a chatbot. It is an autonomous AI workforce. You submit one objective, and specialized AI agents coordinate to deliver outcomes with visible reasoning and live execution logs.
 
-## What Is Live In Phase 4
+## What Is Live In Phase 5
 
-- FastAPI backend core APIs for tasks, status updates, and summaries
-- SQLAlchemy task persistence and Redis-backed read caching
-- Modular multi-agent system with typed contracts and runtime context
-- Dynamic orchestrator + planner intelligence:
-  - objective complexity analysis
-  - milestone generation with owners
-  - state-machine-based task lifecycle transitions
-- Workflow execution API that runs the full agent pipeline and returns timeline transcript
+- FastAPI backend core APIs for tasks, status updates, summaries, workflows, and memory
+- SQLAlchemy task + memory persistence in PostgreSQL
+- Redis-backed caching for task reads and memory recall
+- Modular multi-agent runtime with typed contracts and timeline transcripts
+- Orchestrator + planner intelligence with dynamic milestone generation
+- Memory loop:
+  - recall relevant past records before execution
+  - persist new long-term memory after execution
 
 ## Backend API Surface
 
@@ -32,6 +32,9 @@ Cortex is not a chatbot. It is an autonomous AI workforce. You submit one object
 - `GET /api/v1/agents`
 - `POST /api/v1/agents/simulate`
 - `POST /api/v1/workflows/run`
+- `POST /api/v1/memory/records`
+- `GET /api/v1/memory/recent`
+- `POST /api/v1/memory/recall`
 
 ## Monorepo Layout
 
@@ -54,6 +57,7 @@ Cortex is not a chatbot. It is an autonomous AI workforce. You submit one object
 
 - `powershell ./scripts/demo-agent-simulate.ps1`
 - `powershell ./scripts/demo-workflow-run.ps1`
+- `powershell ./scripts/demo-memory-recall.ps1`
 
 ## Phase Plan
 
@@ -61,7 +65,7 @@ Cortex is not a chatbot. It is an autonomous AI workforce. You submit one object
 - Phase 2: Backend core APIs (complete)
 - Phase 3: Agent base system (complete)
 - Phase 4: Orchestrator + planner workflow intelligence (complete)
-- Phase 5: Memory layer
+- Phase 5: Memory system (complete)
 - Phase 6: Tool execution layer
 - Phase 7: Multi-agent collaboration
 - Phase 8: Premium dashboard
