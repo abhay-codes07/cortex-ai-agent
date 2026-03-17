@@ -11,6 +11,7 @@ from app.schemas.task import (
     TaskUpdateStatusRequest,
 )
 from app.services.cache_service import CacheService
+from app.services.realtime_service import emit_event
 
 
 class TaskService:
@@ -25,6 +26,7 @@ class TaskService:
         self.cache.set_json(f'task:{task.id}', response.model_dump(mode='json'))
         self.cache.invalidate('task:list')
         self.cache.invalidate('task:summary')
+        emit_event('task_created', f'Task created: {task.title}', {'task_id': task.id})
 
         return response
 
@@ -70,6 +72,7 @@ class TaskService:
         self.cache.set_json(f'task:{task.id}', response.model_dump(mode='json'))
         self.cache.invalidate('task:list')
         self.cache.invalidate('task:summary')
+        emit_event('task_status', f'Task status updated: {payload.status.value}', {'task_id': task.id, 'status': payload.status.value})
 
         return response
 
