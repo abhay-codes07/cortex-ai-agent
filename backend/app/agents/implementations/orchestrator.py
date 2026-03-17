@@ -15,6 +15,7 @@ class OrchestratorAgent(BaseAgent):
         profile = self.analyzer.analyze(context.objective)
         workflow_mode = 'parallel-fastlane' if profile.execution_style == 'parallel' else 'iterative-safe'
         memory_hints = context.recall('memory_hints', [])
+        inbox = context.read_inbox(self.role.value)
 
         hint_note = f' using {len(memory_hints)} memory hints' if memory_hints else ''
         thought = self.thought(
@@ -29,12 +30,13 @@ class OrchestratorAgent(BaseAgent):
                 'complexity_score': profile.complexity_score,
                 'urgency_score': profile.urgency_score,
                 'memory_hints_count': len(memory_hints),
+                'inbox_messages': len(inbox),
             },
         )
         message = self.message(
             AgentRole.planner,
             f'Create an executable plan in {workflow_mode} mode for: {context.objective}',
-            {'memory_hints': memory_hints[:2]},
+            {'memory_hints': memory_hints[:2], 'inbox_count': len(inbox)},
         )
 
         context.remember(
