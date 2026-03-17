@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     redis_url: str = Field(default='redis://localhost:6379/0', alias='REDIS_URL')
     redis_ttl_seconds: int = Field(default=120, alias='REDIS_TTL_SECONDS')
 
+    memory_recall_default_limit: int = Field(default=5, alias='MEMORY_RECALL_DEFAULT_LIMIT')
+    memory_recall_cache_ttl: int = Field(default=90, alias='MEMORY_RECALL_CACHE_TTL')
+
     api_v1_prefix: str = Field(default='/api/v1', alias='API_V1_PREFIX')
 
     @property
