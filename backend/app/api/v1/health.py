@@ -10,13 +10,13 @@ def health_check() -> dict[str, str]:
 
 @router.get('/api/v1/status')
 def app_status() -> dict[str, str]:
-    return {'phase': '7', 'message': 'Multi-agent collaboration layer online'}
+    return {'phase': '9', 'message': 'Realtime websocket streaming online'}
 
 
 @router.get('/api/v1/meta')
 def app_meta() -> dict[str, str | list[str]]:
     return {
         'product': 'Cortex',
-        'mode': 'phase-7-collaboration-runtime',
-        'next': ['frontend-luxury-ui', 'realtime-websockets', 'demo-polish'],
+        'mode': 'phase-9-realtime-streaming',
+        'next': ['demo-polish', 'final-readme-screenshots'],
     }
